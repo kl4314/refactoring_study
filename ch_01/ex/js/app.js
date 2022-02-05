@@ -11,7 +11,7 @@ function statement(invoice, plays){
             minimumFractionDigits : 2 }).format;
 
     for(let perf of invoice.performances){
-        const play = plays[perf.playID];
+        const play = playFor(perf);
         let thisAmount = amountFor(perf, play);
         // 포인트를 적립한다.
         volumeCredits += Math.max(perf.audience - 30, 0);
@@ -51,6 +51,9 @@ function amountFor(perf, play){   // 값이 바뀌지 않는 변수는 매개변
     return result; // 함수 안에서 값이 바뀌는 변수 반환
 }
 
+function playFor(aPerformance){
+    return plays[aPerformance.playID];
+}
 
 function readJSON(file, callback) {
     let rawFile = new XMLHttpRequest();
