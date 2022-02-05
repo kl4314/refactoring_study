@@ -1,6 +1,11 @@
 
 
 function statement(invoice, plays){
+
+    function playFor(aPerformance){
+        return plays[aPerformance.playID];
+    }
+
     let totalAmount = 0;
     let volumeCredits = 0;
 
@@ -11,15 +16,14 @@ function statement(invoice, plays){
             minimumFractionDigits : 2 }).format;
 
     for(let perf of invoice.performances){
-        const play = playFor(perf);
-        let thisAmount = amountFor(perf, play);
+        let thisAmount = amountFor(perf, playFor(perf));
         // 포인트를 적립한다.
         volumeCredits += Math.max(perf.audience - 30, 0);
         // 희극 관객 5명마다 추가 포인트를 제공한다.
-        if ("comedy" === play.type) volumeCredits += Math.floor(perf.audience / 5);
+        if ("comedy" === playFor(perf).type) volumeCredits += Math.floor(perf.audience / 5);
 
         // 청구 내역을 출력한다.
-        result += ` ${play.name}: ${format(thisAmount/100)} (${perf.audience}석)\n`;
+        result += ` ${playFor(perf).name}: ${format(thisAmount/100)} (${perf.audience}석)\n`;
         totalAmount += thisAmount;
     }
     result += `총액: ${format(totalAmount/100)}\n`;
@@ -51,9 +55,7 @@ function amountFor(perf, play){   // 값이 바뀌지 않는 변수는 매개변
     return result; // 함수 안에서 값이 바뀌는 변수 반환
 }
 
-function playFor(aPerformance){
-    return plays[aPerformance.playID];
-}
+
 
 function readJSON(file, callback) {
     let rawFile = new XMLHttpRequest();
