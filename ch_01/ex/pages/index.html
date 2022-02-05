@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <title>refactoring_study</title>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+
+
+    <button onclick="test();">test</button>
+    <script type="text/javascript" src="../js/app.js"></script>
+    <script type="text/javascript">
+
+        function test() {
+            let invoice;
+            let plays;
+
+            readJSON("../data/invoices.json", function(text){
+                invoice = JSON.parse(text)[0];
+                readJSON("../data/plays.json", function(text){
+                    plays = JSON.parse(text);
+                    console.log(statement(invoice, plays));
+                });
+            });
+
+
+
+        }
+    </script>
+
+    </body>
+</html>
