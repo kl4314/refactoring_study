@@ -4,9 +4,13 @@ function statement(invoice, plays){
 
     const statementData = {};
     statementData.customer = invoice.customer;
-    statementData.performances = invoice.performances;
+    statementData.performances = invoice.performances.map(enrichPerformance);
     return renderPlainText(statementData, plays);
 
+    function enrichPerformance(aPerformance){
+        const result = Object.assign({}, aPerformance);
+        return result;
+    }
     function playFor(aPerformance){
         return plays[aPerformance.playID];
     }
@@ -50,7 +54,13 @@ function statement(invoice, plays){
     }
 
     function renderPlainText(data, plays){
-
+        let result = `청구 내역 (고객명 : ${data.customer})\n`;
+        for(let perf of data.performances){
+            result += ` ${playFor(perf).name}: ${usd(amountFor(perf))} (${perf.audience}석)\n`;
+        }
+        result += `총액: ${usd(totalAmount())}\n`;
+        result += `적립 포인트 : ${totalVolumeCredits()}점\n`;
+        return result;
         function totalVolumeCredits(){
             let result = 0;
             for(let perf of data.performances){
@@ -66,14 +76,6 @@ function statement(invoice, plays){
             }
             return result;
         }
-
-        let result = `청구 내역 (고객명 : ${data.customer})\n`;
-        for(let perf of data.performances){
-            result += ` ${playFor(perf).name}: ${usd(amountFor(perf))} (${perf.audience}석)\n`;
-        }
-        result += `총액: ${usd(totalAmount())}\n`;
-        result += `적립 포인트 : ${totalVolumeCredits()}점\n`;
-        return result;
     }
 }
 
