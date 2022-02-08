@@ -12,8 +12,6 @@ class PerformanceCalculator{
     get volumeCredits() {
         return Math.max(this.performance.audience - 30, 0);
     }
-
-
 }
 
 class TragedyCalculator extends PerformanceCalculator{
